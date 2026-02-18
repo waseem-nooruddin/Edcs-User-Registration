@@ -87,10 +87,18 @@ export default class TeamsReporter implements Reporter {
   }
 
   async onEnd(result: FullResult): Promise<void> {
+    // Allow disabling Teams notifications via flag (without removing the webhook URL)
+    const sendReport = process.env.SEND_TEAMS_REPORT;
+    if (sendReport === 'false' || sendReport === '0') {
+      console.log('ℹ️  Teams notification is disabled (SEND_TEAMS_REPORT=false). Skipping.');
+      return;
+    }
+
     if (!this.webhookUrl) {
       console.log('Skipping Teams notification (no webhook URL configured)');
       return;
     }
+
 
     // Process all test attempts to determine final status
     this.processTestResults();
@@ -278,18 +286,22 @@ export default class TeamsReporter implements Reporter {
     const totalFailed = this.testResults.failed + this.testResults.timedout;
     const passRate = totalTests > 0 ? ((this.testResults.passed + this.testResults.flaky) / totalTests * 100).toFixed(1) : '0.0';
 
+    const summaryTable = [
+      '| Field | Value |',
+      '|:---|:---|',
+      `| 📊 Total Tests | ${totalTests} |`,
+      `| ✅ Passed | ${this.testResults.passed} |`,
+      `| ❌ Failed | ${totalFailed} |`,
+      `| ⏭️ Skipped | ${this.testResults.skipped} |`,
+      `| ⚠️ Flaky | ${this.testResults.flaky} |`,
+      `| 📈 Pass Rate | ${passRate}% |`,
+    ].join('\n');
+
     const sections: any[] = [
       {
-        activityTitle: `${overallStatus.emoji} ${this.projectName} - Test Execution Complete`,
+        activityTitle: `${overallStatus.emoji} ${this.projectName} - Automated Test Run`,
         activitySubtitle: `Executed on ${timestamp} | Duration: ${duration}`,
-        facts: [
-          { name: '📊 Total Tests:', value: `${totalTests}` },
-          { name: '✅ Passed:', value: `${this.testResults.passed}` },
-          { name: '❌ Failed:', value: `${totalFailed}` },
-          { name: '⏭️ Skipped:', value: `${this.testResults.skipped}` },
-          { name: '⚠️ Flaky:', value: `${this.testResults.flaky}` },
-          { name: '📈 Pass Rate:', value: `${passRate}%` },
-        ],
+        text: summaryTable,
         markdown: true,
       },
     ];
@@ -319,41 +331,19 @@ export default class TeamsReporter implements Reporter {
       });
     }
 
-    // Add failed test details (limit to avoid message size limits)
-    if (this.failedTests.length > 0) {
-      const failedTestsToShow = this.failedTests.slice(0, MAX_FAILED_TESTS_DISPLAY);
-      const failedTestsFacts = failedTestsToShow.map((test, index) => ({
-        name: `${index + 1}. ${test.title}`,
-        value: this.truncateError(test.error, ERROR_TRUNCATE_LENGTH),
-      }));
-
-      sections.push({
-        activityTitle: `❌ Failed Tests (${this.failedTests.length})`,
-        facts: failedTestsFacts,
-        markdown: true,
-      });
-
-      if (this.failedTests.length > MAX_FAILED_TESTS_DISPLAY) {
-        sections.push({
-          text: `_... and ${this.failedTests.length - MAX_FAILED_TESTS_DISPLAY} more failed tests. Check the full report for details._`,
-          markdown: true,
-        });
-      }
-    }
-
     // Add flaky test details
-    if (this.flakyTests.length > 0) {
-      const flakyTestsFacts = this.flakyTests.slice(0, MAX_FLAKY_TESTS_DISPLAY).map((test, index) => ({
-        name: `${index + 1}. ${test.title}`,
-        value: `Passed after ${test.attempts} attempts`,
-      }));
+    // if (this.flakyTests.length > 0) {
+    //   const flakyTestsFacts = this.flakyTests.slice(0, MAX_FLAKY_TESTS_DISPLAY).map((test, index) => ({
+    //     name: `${index + 1}. ${test.title}`,
+    //     value: `Passed after ${test.attempts} attempts`,
+    //   }));
 
-      sections.push({
-        activityTitle: `⚠️ Flaky Tests (${this.flakyTests.length})`,
-        facts: flakyTestsFacts,
-        markdown: true,
-      });
-    }
+    //   sections.push({
+    //     activityTitle: `⚠️ Flaky Tests (${this.flakyTests.length})`,
+    //     facts: flakyTestsFacts,
+    //     markdown: true,
+    //   });
+    // }
 
     // Add action buttons
     const potentialActions = this.getActionButtons();
