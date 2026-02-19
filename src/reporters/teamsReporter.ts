@@ -321,15 +321,15 @@ export default class TeamsReporter implements Reporter {
     // }
 
 
-    // Add CI/CD metadata if available
-    const ciMetadata = this.getCIMetadata();
-    if (ciMetadata.length > 0) {
-      sections.push({
-        activityTitle: '🔧 Environment',
-        facts: ciMetadata,
-        markdown: true,
-      });
-    }
+    // // Add CI/CD metadata if available
+    // const ciMetadata = this.getCIMetadata();
+    // if (ciMetadata.length > 0) {
+    //   sections.push({
+    //     activityTitle: '🔧 Environment',
+    //     facts: ciMetadata,
+    //     markdown: true,
+    //   });
+    // }
 
     // Add flaky test details
     // if (this.flakyTests.length > 0) {
