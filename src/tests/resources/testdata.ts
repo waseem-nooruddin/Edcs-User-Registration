@@ -41,5 +41,7 @@ export const testdata = {
   hrms_nicDateOfIssue: "2010-01-01",
   hrms_dateOfJoin: "2026-01-01",
   hrms_noticeDate: "NORMAL",
+  hrms_priorNoticePeriod: "ONE MONTH",
+  hrms_confirmationDueOn: "2026-01-01"
 
 };

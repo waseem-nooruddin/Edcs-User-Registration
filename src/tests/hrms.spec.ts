@@ -60,8 +60,9 @@ test.describe("Employee Registration", () => {
       await hrmsPage.enterDateOfJoin(testdata.hrms_dateOfJoin);
       await hrmsPage.NoticePeriod();
       await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
-      //await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
-      // await hrmsPage.selectPriorNoticePeriod();
+      await hrmsPage.selectPriorNoticePeriod(testdata.hrms_priorNoticePeriod);
+      await hrmsPage.selectconfirmationdueon(testdata.hrms_confirmationDueOn);
+
     },
   );
 });

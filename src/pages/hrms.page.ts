@@ -135,6 +135,15 @@ export class HrmsPage {
     await this.page.getByRole("option", { name: NoticeDate }).click();
   }
 
-
+  async selectPriorNoticePeriod(date: string) {
+    await this.page.locator("#root_priorNotiePeriod").click();
+    await this.page.getByRole('option', { name: date }).click();
   
+  }
+
+    async selectconfirmationdueon(dateConfirmationdueon: string) {
+    await this.page.locator("#root_confirmationdueon").click();
+    await this.page.fill("#root_confirmationdueon", dateConfirmationdueon);
+  }
+
 }
