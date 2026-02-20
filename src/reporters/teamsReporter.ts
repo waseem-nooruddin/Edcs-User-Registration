@@ -439,17 +439,20 @@ export default class TeamsReporter implements Reporter {
   private getActionButtons(): any[] {
     const actions: any[] = [];
 
-    // Add link to HTML report if available
-    if (process.env.PLAYWRIGHT_REPORT_URL) {
-      actions.push({
-        '@type': 'OpenUri',
-        name: '📊 View Report',
-        targets: [{ os: 'default', uri: process.env.PLAYWRIGHT_REPORT_URL }],
-      });
-    }
+    // Add link to HTML report
+    const reportUrl = process.env.PLAYWRIGHT_REPORT || 'http://localhost:9323/';
+
+    actions.push({
+      '@type': 'OpenUri',
+      name: '📊 View HTML Report',
+      targets: [{ os: 'default', uri: reportUrl }],
+    });
 
     return actions;
   }
+
+
+
 
   /**
    * Format duration in human-readable format
@@ -603,6 +606,8 @@ export default class TeamsReporter implements Reporter {
         },
       },
     };
+
+
 
     // Encode chart configuration for URL
     const encodedChart = encodeURIComponent(JSON.stringify(chartConfig));
