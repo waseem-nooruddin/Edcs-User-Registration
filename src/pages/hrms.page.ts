@@ -127,11 +127,14 @@ export class HrmsPage {
     await this.page.locator("#root_dateOfJoined").fill(date);
   }
 
-  async enterNoticeDate() {
+  async NoticePeriod() {
     await this.page.locator("#root_workShipCategoryId").click();
   }
 
   async selectNoticePeriod(NoticeDate: string) {
     await this.page.getByRole("option", { name: NoticeDate }).click();
   }
+
+
+  
 }
