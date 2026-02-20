@@ -440,7 +440,7 @@ export default class TeamsReporter implements Reporter {
     const actions: any[] = [];
 
     // Add link to HTML report
-    const reportUrl = process.env.PLAYWRIGHT_REPORT || 'http://localhost:9323/';
+    const reportUrl = process.env.PLAYWRIGHT_REPORT || 'C:\Users\WaseemNooruddin\VSCodeProjects\Edcs-User Registration_V3\playwright-report\index.html';
 
     actions.push({
       '@type': 'OpenUri',
