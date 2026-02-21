@@ -58,9 +58,11 @@ test.describe("Employee Registration", () => {
       await hrmsPage.selectResignedTerrminated(testdata.Resigned);
       await hrmsPage.selectEmployeeType(testdata.EmployeeType);
       await hrmsPage.enterDateOfJoin(testdata.hrms_dateOfJoin);
-      await hrmsPage.enterNoticeDate();
-      //await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
-      // await hrmsPage.selectPriorNoticePeriod();
+      await hrmsPage.NoticePeriod();
+      await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
+      await hrmsPage.selectPriorNoticePeriod(testdata.hrms_priorNoticePeriod);
+      await hrmsPage.selectconfirmationdueon(testdata.hrms_confirmationDueOn);
+
     },
   );
 });

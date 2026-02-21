@@ -11,13 +11,24 @@ on:
     - cron: '30 22 * * *'
   # Allow manual trigger from GitHub Actions UI
   workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
 jobs:
   test:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
       TEAMS_WEBHOOK_URL: ${{ secrets.TEAMS_WEBHOOK_URL }}
-      PLAYWRIGHT_REPORT_URL: ${{ secrets.PLAYWRIGHT_REPORT_URL }}
+      # GitHub Pages URL for the Playwright HTML report
+      PLAYWRIGHT_REPORT_URL: https://${{ github.repository_owner }}.github.io/${{ github.event.repository.name }}/
     steps:
     - uses: actions/checkout@v4
     - uses: actions/setup-node@v4
@@ -29,9 +40,15 @@ jobs:
       run: npx playwright install --with-deps
     - name: Run Playwright tests
       run: npx playwright test
-    - uses: actions/upload-artifact@v4
+    - name: Setup Pages
       if: ${{ !cancelled() }}
+      uses: actions/configure-pages@v5
+    - name: Upload report to GitHub Pages
+      if: ${{ !cancelled() }}
+      uses: actions/upload-pages-artifact@v3
       with:
-        name: playwright-report
         path: playwright-report/
-        retention-days: 30
+    - name: Deploy to GitHub Pages
+      if: ${{ !cancelled() }}
+      id: deployment
+      uses: actions/deploy-pages@v4

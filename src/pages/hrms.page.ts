@@ -127,11 +127,23 @@ export class HrmsPage {
     await this.page.locator("#root_dateOfJoined").fill(date);
   }
 
-  async enterNoticeDate() {
+  async NoticePeriod() {
     await this.page.locator("#root_workShipCategoryId").click();
   }
 
   async selectNoticePeriod(NoticeDate: string) {
     await this.page.getByRole("option", { name: NoticeDate }).click();
   }
+
+  async selectPriorNoticePeriod(date: string) {
+    await this.page.locator("#root_priorNotiePeriod").click();
+    await this.page.getByRole('option', { name: date }).click();
+  
+  }
+
+    async selectconfirmationdueon(dateConfirmationdueon: string) {
+    await this.page.locator("#root_confirmationdueon").click();
+    await this.page.fill("#root_confirmationdueon", dateConfirmationdueon);
+  }
+
 }

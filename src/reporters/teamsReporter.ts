@@ -440,8 +440,8 @@ export default class TeamsReporter implements Reporter {
     const actions: any[] = [];
 
     // Resolve the report URL in priority order:
-    // 1. Explicit env var set in CI/CD: PLAYWRIGHT_REPORT_URL
-    // 2. GitHub Actions run page (contains the uploaded playwright-report artifact)
+    // 1. PLAYWRIGHT_REPORT_URL → set in playwright.yml to the GitHub Pages URL
+    // 2. GitHub Actions run page (fallback when Pages URL isn't available)
     // 3. Local dev fallback
     let reportUrl = process.env.PLAYWRIGHT_REPORT_URL;
 
