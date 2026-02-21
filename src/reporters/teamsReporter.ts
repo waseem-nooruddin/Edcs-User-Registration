@@ -439,17 +439,35 @@ export default class TeamsReporter implements Reporter {
   private getActionButtons(): any[] {
     const actions: any[] = [];
 
-    // Add link to HTML report if available
-    if (process.env.PLAYWRIGHT_REPORT_URL) {
-      actions.push({
-        '@type': 'OpenUri',
-        name: '📊 View Report',
-        targets: [{ os: 'default', uri: process.env.PLAYWRIGHT_REPORT_URL }],
-      });
+    // Resolve the report URL in priority order:
+    // 1. Explicit env var set in CI/CD: PLAYWRIGHT_REPORT_URL
+    // 2. GitHub Actions run page (contains the uploaded playwright-report artifact)
+    // 3. Local dev fallback
+    let reportUrl = process.env.PLAYWRIGHT_REPORT_URL;
+
+    if (!reportUrl && process.env.GITHUB_ACTIONS) {
+      const repo = process.env.GITHUB_REPOSITORY; // e.g. "org/repo"
+      const runId = process.env.GITHUB_RUN_ID;    // numeric run ID
+      if (repo && runId) {
+        reportUrl = `https://github.com/${repo}/actions/runs/${runId}`;
+      }
     }
+
+    if (!reportUrl) {
+      reportUrl = 'http://localhost:9323/';
+    }
+
+    actions.push({
+      '@type': 'OpenUri',
+      name: '📊 View HTML Report',
+      targets: [{ os: 'default', uri: reportUrl }],
+    });
 
     return actions;
   }
+
+
+
 
   /**
    * Format duration in human-readable format
@@ -603,6 +621,8 @@ export default class TeamsReporter implements Reporter {
         },
       },
     };
+
+
 
     // Encode chart configuration for URL
     const encodedChart = encodeURIComponent(JSON.stringify(chartConfig));
