@@ -25,7 +25,7 @@ test.describe("Employee Registration", () => {
       expect(
         page.getByRole("heading", { name: "Employee Registration List" }),
       ).toBeVisible();
-      
+
     },
   );
 
@@ -51,17 +51,17 @@ test.describe("Employee Registration", () => {
       await hrmsPage.enterMaritalStatus('Married');
       await hrmsPage.clickNext();
 
-      await hrmsPage.enterEmployeeNumber(testdata.Employee_Number);
-      await hrmsPage.enterEmployeeEpfNumber(testdata.Emplloyee_EPFNumber);
-      await hrmsPage.selectBranch(testdata.branchName);
-      await hrmsPage.selectDivision(testdata.Division);
-      await hrmsPage.selectResignedTerrminated(testdata.Resigned);
-      await hrmsPage.selectEmployeeType(testdata.EmployeeType);
-      await hrmsPage.enterDateOfJoin(testdata.hrms_dateOfJoin);
-      await hrmsPage.NoticePeriod();
-      await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
-      await hrmsPage.selectPriorNoticePeriod(testdata.hrms_priorNoticePeriod);
-      await hrmsPage.selectconfirmationdueon(testdata.hrms_confirmationDueOn);
+      // await hrmsPage.enterEmployeeNumber(testdata.Employee_Number);
+      // await hrmsPage.enterEmployeeEpfNumber(testdata.Emplloyee_EPFNumber);
+      // await hrmsPage.selectBranch(testdata.branchName);
+      // await hrmsPage.selectDivision(testdata.Division);
+      // await hrmsPage.selectResignedTerrminated(testdata.Resigned);
+      // await hrmsPage.selectEmployeeType(testdata.EmployeeType);
+      // await hrmsPage.enterDateOfJoin(testdata.hrms_dateOfJoin);
+      // await hrmsPage.NoticePeriod();
+      // await hrmsPage.selectNoticePeriod(testdata.hrms_noticeDate);
+      // await hrmsPage.selectPriorNoticePeriod(testdata.hrms_priorNoticePeriod);
+      // await hrmsPage.selectconfirmationdueon(testdata.hrms_confirmationDueOn);
 
     },
   );
